@@ -10,12 +10,18 @@ const emptyState = document.querySelector("#empty-state");
 const results = document.querySelector("#results");
 const content = document.querySelector("#result-content");
 const badge = document.querySelector("#generated-badge");
+const copyButton = document.querySelector("#copy-button");
+const downloadButton = document.querySelector("#download-button");
 
+let generatedIdea = "";
+const safeText = (value) => value.replace(/[&<>"']/g, (character) => ({
+  "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+}[character]));
 const tabs = {
-  overview: `<h3>LocalCart, for every kirana.</h3><p>A lightweight ordering layer that helps neighborhood stores accept WhatsApp-like orders without learning a new dashboard.</p><ul><li><strong>Audience:</strong> independent kirana owners and their regular customers</li><li><strong>Core action:</strong> turn a voice or text order into a confirmed cart</li><li><strong>First release:</strong> catalog, order capture, UPI payment, delivery status</li></ul>`,
-  architecture: `<h3>Simple by design.</h3><div class="code-card">[ Customer ] → [ Web App ] → [ API ]<br />                         ├─ Orders DB<br />                         ├─ Payment Gateway<br />                         └─ WhatsApp Notify</div><p>Start as a responsive web app. Add a store dashboard once order volume proves the workflow.</p>`,
-  schema: `<h3>Order API</h3><div class="code-card">POST /v1/orders<br />{<br />  "store_id": "string",<br />  "items": [{ "sku": "string", "qty": 1 }],<br />  "payment": "upi"<br />}</div>`,
-  pitch: `<h3>Say this out loud.</h3><p>“LocalCart helps your neighborhood kirana store take digital orders as naturally as a phone call. Customers get a simple cart, owners get fewer missed orders, and the store stays exactly where it belongs — at the heart of the community.”</p>`
+  overview: () => `<h3>${safeText(generatedIdea || "Your product")}<br /><span class="result-subtitle">A build-ready starting point.</span></h3><p>A focused first release that turns the core user need into a simple, testable workflow.</p><ul><li><strong>Audience:</strong> people who need a faster, more local way to get things done</li><li><strong>Core action:</strong> capture intent and move it to a clear next step</li><li><strong>First release:</strong> onboarding, the core action, status updates, and feedback</li></ul>`,
+  architecture: () => `<h3>Simple by design.</h3><div class="code-card">[ User ] → [ Web App ] → [ API ]<br />                         ├─ Core Data<br />                         ├─ Notifications<br />                         └─ Analytics</div><p>Start as a responsive web app. Add a dedicated dashboard once usage proves the workflow.</p>`,
+  schema: () => `<h3>Core API</h3><div class="code-card">POST /v1/requests<br />{<br />  "user_id": "string",<br />  "payload": "object",<br />  "status": "pending"<br />}</div>`,
+  pitch: () => `<h3>Say this out loud.</h3><p>“${safeText(generatedIdea || "This idea")} becomes a simple product that removes friction from an everyday task. It gives people a clearer next step, while keeping the experience fast, familiar, and human.”</p>`
 };
 
 input.addEventListener("input", () => { charCount.textContent = `${input.value.length} / 800`; });
@@ -29,18 +35,26 @@ audioInput.addEventListener("change", () => {
 ["dragleave", "drop"].forEach((event) => dropzone.addEventListener(event, (e) => { e.preventDefault(); dropzone.classList.remove("dragging"); }));
 dropzone.addEventListener("drop", (e) => { audioInput.files = e.dataTransfer.files; audioInput.dispatchEvent(new Event("change")); });
 
-function renderTab(tab = "overview") { content.innerHTML = tabs[tab]; }
+function renderTab(tab = "overview") { content.innerHTML = tabs[tab](); }
 generateButton.addEventListener("click", () => {
   if (!input.value.trim() && !audioInput.files.length) {
     input.focus();
     input.placeholder = "Start with your messy idea — no polish needed...";
     return;
   }
+  generatedIdea = input.value.trim() || "Your voice-note idea";
+  generateButton.disabled = true;
+  generateButton.querySelector("span").textContent = "Building your spec...";
   emptyState.hidden = true;
   results.hidden = false;
-  badge.textContent = "Generated";
-  badge.classList.add("live");
-  renderTab();
+  content.innerHTML = `<div class="loading-copy">Listening, structuring, and sketching your idea</div>`;
+  window.setTimeout(() => {
+    badge.textContent = "Generated";
+    badge.classList.add("live");
+    generateButton.disabled = false;
+    generateButton.querySelector("span").textContent = "Generate my spec";
+    renderTab();
+  }, 650);
 });
 document.querySelectorAll(".result-tab").forEach((tab) => tab.addEventListener("click", () => {
   document.querySelectorAll(".result-tab").forEach((item) => item.classList.remove("active"));
@@ -54,4 +68,21 @@ document.querySelector("#reset-button").addEventListener("click", () => {
   badge.classList.remove("live");
   input.value = "";
   charCount.textContent = "0 / 800";
+  generatedIdea = "";
+  generateButton.disabled = false;
+  generateButton.querySelector("span").textContent = "Generate my spec";
+});
+copyButton.addEventListener("click", async () => {
+  const text = `${generatedIdea}\n\n${content.innerText}`;
+  await navigator.clipboard.writeText(text);
+  copyButton.textContent = "Copied ✓";
+  window.setTimeout(() => { copyButton.textContent = "Copy brief"; }, 1600);
+});
+downloadButton.addEventListener("click", () => {
+  const blob = new Blob([`# ${generatedIdea}\n\n${content.innerText}`], { type: "text/markdown" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "vaanispec-brief.md";
+  link.click();
+  URL.revokeObjectURL(link.href);
 });

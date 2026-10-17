@@ -73,8 +73,14 @@ textarea::placeholder { color: #555; }
 .result-content p, .result-content li { color: var(--soft); font-size: 13px; line-height: 1.65; }
 .result-content ul { padding-left: 19px; }
 .code-card { background: #101010; border: 1px solid var(--line); padding: 15px; color: var(--lime); font: 11px/1.8 var(--mono); white-space: pre-wrap; }
+.result-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+.result-actions .secondary-button { flex: 1; min-width: 112px; }
 .secondary-button { background: transparent; color: var(--muted); border: 1px solid var(--line); padding: 13px 16px; justify-content: center; }
 .secondary-button:hover { color: var(--text); border-color: #777; }
+.secondary-button:disabled { cursor: wait; opacity: .65; }
+.loading-copy { color: var(--muted); font: 11px var(--mono); text-align: center; padding-top: 160px; }
+.loading-copy::before { content: ""; display: block; width: 8px; height: 8px; border: 1px solid var(--lime); border-top-color: transparent; border-radius: 50%; margin: 0 auto 18px; animation: spin .7s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 .pipeline { display: grid; grid-template-columns: 180px 1fr 3fr; gap: 28px; padding: 90px 0 105px; align-items: center; }
 .pipeline-label { display: flex; flex-direction: column; gap: 15px; }
 .pipeline-label span { color: var(--muted); }
