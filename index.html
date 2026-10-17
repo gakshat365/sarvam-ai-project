@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="VaaniSpec turns a Hinglish voice note into a production-ready product blueprint." />
+    <title>VaaniSpec — Hinglish to Product</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="VaaniSpec home">
+        <span class="brand-mark">V</span>
+        <span>Vaani<span class="brand-muted">Spec</span></span>
+      </a>
+      <div class="topbar-right">
+        <span class="status-dot"></span>
+        <span>Prototype mode</span>
+        <button class="icon-button" aria-label="Open settings">•••</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div class="eyebrow"><span>01</span> SPEAK IT. SHIP IT.</div>
+        <h1>From <em>“bas ek idea hai”</em><br />to a build-ready brief.</h1>
+        <p class="hero-copy">Drop a messy Hinglish or Tanglish voice note. VaaniSpec turns your raw thought into the architecture, product spec, API schema, and pitch your team can actually use.</p>
+      </section>
+
+      <section class="workspace">
+        <div class="input-panel panel">
+          <div class="panel-head">
+            <div>
+              <span class="panel-kicker">INPUT / VOICE NOTE</span>
+              <h2>Tell us what you’re building.</h2>
+            </div>
+            <span class="duration">00:60 max</span>
+          </div>
+
+          <div class="dropzone" id="dropzone">
+            <input id="audio-input" type="file" accept="audio/*" hidden />
+            <button class="upload-orb" id="upload-button" aria-label="Upload an audio file">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14v4a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-4"/></svg>
+            </button>
+            <strong id="drop-title">Drop your voice note here</strong>
+            <span id="drop-subtitle">or click to browse · MP3, WAV, M4A</span>
+          </div>
+
+          <div class="divider"><span>OR TYPE IT OUT</span></div>
+          <label class="sr-only" for="idea-input">Describe your product idea</label>
+          <textarea id="idea-input" placeholder="“Mujhe ek aisa app banana hai jahan local kirana stores..." maxlength="800"></textarea>
+          <div class="input-footer">
+            <span id="char-count">0 / 800</span>
+            <span>Hinglish · Tanglish · English</span>
+          </div>
+          <button class="primary-button" id="generate-button">
+            <span>Generate my spec</span>
+            <span class="button-arrow">↗</span>
+          </button>
+          <p class="privacy-note"><span>⌁</span> Your idea stays private in this prototype.</p>
+        </div>
+
+        <div class="output-panel panel">
+          <div class="panel-head output-head">
+            <div>
+              <span class="panel-kicker">OUTPUT / VaaniSpec</span>
+              <h2>Your product, clearly.</h2>
+            </div>
+            <span class="generated-badge" id="generated-badge">Ready</span>
+          </div>
+          <div class="empty-state" id="empty-state">
+            <div class="empty-glyph">✳</div>
+            <p>Your generated product blueprint<br />will appear here.</p>
+            <span>One voice note. Four artifacts. Zero blank pages.</span>
+          </div>
+          <div class="results" id="results" hidden>
+            <div class="result-tabs" role="tablist">
+              <button class="result-tab active" data-tab="overview">Overview</button>
+              <button class="result-tab" data-tab="architecture">Architecture</button>
+              <button class="result-tab" data-tab="schema">API schema</button>
+              <button class="result-tab" data-tab="pitch">Voice pitch</button>
+            </div>
+            <div class="result-content" id="result-content"></div>
+            <button class="secondary-button" id="reset-button">← Start another idea</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="pipeline">
+        <div class="pipeline-label"><span>POWERED BY</span><strong>Five signals in.<br />One clear direction out.</strong></div>
+        <div class="pipeline-line"></div>
+        <div class="pipeline-steps">
+          <div><span>01</span><strong>Saaras</strong><small>Speech to text</small></div>
+          <div><span>02</span><strong>Text-LID</strong><small>Language detection</small></div>
+          <div><span>03</span><strong>Transliterate</strong><small>Script cleanup</small></div>
+          <div><span>04</span><strong>Sarvam-M</strong><small>Product reasoning</small></div>
+          <div><span>05</span><strong>Bulbul</strong><small>Voice output</small></div>
+        </div>
+      </section>
+    </main>
+
+    <footer><span>VaaniSpec / A Sarvam-powered concept</span><span>Built for ideas that sound better out loud.</span></footer>
+    <script src="app.js"></script>
+  </body>
+</html>

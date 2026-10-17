@@ -1,0 +1,1 @@
+// The prototype is frontend-only. Keep any future Sarvam proxy credential server-side.
